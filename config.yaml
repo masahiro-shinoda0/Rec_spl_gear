@@ -1,0 +1,18 @@
+# データの項目設定
+USER_ID_FIELD: weapon_id
+ITEM_ID_FIELD: ability_id
+LABEL_FIELD: label
+load_col:
+    inter: [weapon_id, ability_id, mode, stage, label]
+
+# モデルと学習の設定
+model: FM
+embedding_size: 64
+learning_rate: 0.001
+train_batch_size: 2048
+epochs: 50
+checkpoint_dir: 'saved'
+
+# 評価の設定
+metrics: ['AUC', 'LogLoss']
+valid_metric: AUC
