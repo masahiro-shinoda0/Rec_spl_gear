@@ -24,7 +24,7 @@ conda activate recbole
 ```
 ssh-keygen -t ED25519
 ```
-これで，鍵を取得できる．
+これで，鍵を取得できる．`ssh xxx`でサーバーに接続する．
 
 
 ## 2025/12/22
@@ -75,3 +75,54 @@ pip install pydantic
 ```
 source bin/activate
 ```
+うまくいかないときは，以下を試すと動くらしい．仮想環境で行う．まず，`torch`のバージョンを指定して実行．
+```
+pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu130
+```
+次に，`PyTorch`のコードを改変する．`venv`の場合，`env/lib/python3.13/site-packages/recbole/trainer/trainer.py`の583行目を以下のように変更．\
+`checkpoint = torch.load(checkpoint_file, map_location=self.device, weights_only=False)`
+
+## 2026/01/06
+`run.py`を実行してできた`pth`ファイルをもとに，推論用の`predict.py`を使用して，精度を確かめた．当初の予測精度と推論の結果は以下のようになった．
+```
+auc : 0.6073    logloss : 0.6711
+
+05 Jan 00:17    INFO  Finished training, best eval result in epoch 23
+```
+```
+
+--- sshooter のおすすめギアパワー TOP10 ---
+1: comeback             (Score: 0.5176)
+2: ink_resistance_up    (Score: 0.4962)
+3: stealth_jump         (Score: 0.4809)
+4: drop_roller          (Score: 0.4789)
+5: special_saver        (Score: 0.4789)
+6: special_charge_up    (Score: 0.4752)
+7: swim_speed_up        (Score: 0.4675)
+8: quick_super_jump     (Score: 0.4639)
+9: object_shredder      (Score: 0.4609)
+10: quick_respawn        (Score: 0.4563)
+
+--- liter4k のおすすめギアパワー TOP10 ---
+1: drop_roller          (Score: 0.5592)
+2: special_saver        (Score: 0.5394)
+3: haunt                (Score: 0.5373)
+4: comeback             (Score: 0.5365)
+5: respawn_punisher     (Score: 0.5296)
+6: object_shredder      (Score: 0.5205)
+7: ink_resistance_up    (Score: 0.5119)
+8: ninja_squid          (Score: 0.5087)
+9: stealth_jump         (Score: 0.5077)
+10: ink_saver_main       (Score: 0.5068)
+```
+次に，UI作成を試みた．`Google Colab`でノートブックを新たに作成した．`recbole.jpynb`とした．以下をセルで実行して，フォルダを作成．
+```
+!mkdir -p dataset/splatoon3
+```
+また，ライブラリのインストールは，以下のコマンドをセルで実行する．
+```
+!pip install recbole streamlit pyngrok -q
+!npm install -g localtunnel -q
+```
+フォルダ内に`app.py`を作成し，アプリケーションのメイン部分とする．`streamlit`というフレームワークを使い，ブラウザ上で動くアプリを作る．`localtunnel`を組み合わせて，一時的にWebアプリを外部公開する．\
+`splatoon3.inter`と`.pth`ファイルを使い，アプリを動かす．
