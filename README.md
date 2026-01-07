@@ -22,6 +22,7 @@ conda activate recbole
 - `mkdir`でフォルダを作成
 - `cat`でファイルの中身を表示
 - `vi`または`vim`でテキストエディタを開ける
+- `ssh`でサーバーに接続し，`logout`で接続解除
 
 `saved` フォルダ内にある`.pth`を使って，新規ユーザの推薦を行う．`.pth`は`PyTorch`のモデルデータである．\
 `hyper parameter` の設定は，レファレンスを読んで理解する．\
