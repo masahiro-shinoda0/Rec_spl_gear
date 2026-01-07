@@ -65,7 +65,7 @@ for file in glob.glob(input_path):
                     # 2. 装備していないギア（負例サンプル：案B）
                     # 1プレイヤーにつき5つ、選ばなかったギアを「勝率0/重み0」として追加
                     unused = list(set(ALL_ABILITIES) - set(equipped_names))
-                    neg_samples = random.sample(unused, min(len(unused), 5))
+                    neg_samples = random.sample(unused, min(len(unused), 12))
                     for neg_name in neg_samples:
                         all_data.append({
                             'weapon_id:token': weapon,
