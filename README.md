@@ -102,30 +102,30 @@ auc : 0.6073    logloss : 0.6711
 ```
 ```
 --- sshooter のおすすめギアパワー TOP10 ---
-1: comeback             (Score: 0.5176)
-2: ink_resistance_up    (Score: 0.4962)
-3: stealth_jump         (Score: 0.4809)
-4: drop_roller          (Score: 0.4789)
-5: special_saver        (Score: 0.4789)
-6: special_charge_up    (Score: 0.4752)
-7: swim_speed_up        (Score: 0.4675)
-8: quick_super_jump     (Score: 0.4639)
-9: object_shredder      (Score: 0.4609)
-10: quick_respawn        (Score: 0.4563)
+1: comeback             (Score: 0.5176)  ##
+2: ink_resistance_up    (Score: 0.4962)  #
+3: stealth_jump         (Score: 0.4809)  #####
+4: drop_roller          (Score: 0.4789)  #
+5: special_saver        (Score: 0.4789)  ###
+6: special_charge_up    (Score: 0.4752)  #####
+7: swim_speed_up        (Score: 0.4675)  #####
+8: quick_super_jump     (Score: 0.4639)  ###
+9: object_shredder      (Score: 0.4609)  #
+10: quick_respawn        (Score: 0.4563) ####
 
 --- liter4k のおすすめギアパワー TOP10 ---
-1: drop_roller          (Score: 0.5592)
-2: special_saver        (Score: 0.5394)
-3: haunt                (Score: 0.5373)
-4: comeback             (Score: 0.5365)
-5: respawn_punisher     (Score: 0.5296)
-6: object_shredder      (Score: 0.5205)
-7: ink_resistance_up    (Score: 0.5119)
-8: ninja_squid          (Score: 0.5087)
-9: stealth_jump         (Score: 0.5077)
-10: ink_saver_main       (Score: 0.5068)
+1: drop_roller          (Score: 0.5592)  #
+2: special_saver        (Score: 0.5394)  ##
+3: haunt                (Score: 0.5373)  #
+4: comeback             (Score: 0.5365)  #
+5: respawn_punisher     (Score: 0.5296)  ####
+6: object_shredder      (Score: 0.5205)  ###
+7: ink_resistance_up    (Score: 0.5119)  #
+8: ninja_squid          (Score: 0.5087)  #
+9: stealth_jump         (Score: 0.5077)  #
+10: ink_saver_main       (Score: 0.5068) ##
 ```
-また，この時使用していた`config.yaml`の設定は，`model: FM`であった．
+私のゲームの経験から，予測が正しいと思うものには`#`の数でチェックを入れている．また，この時使用していた`config.yaml`の設定は，`model: FM, learningrate: 0.001, train_batch_size: 2048, epochs: 50`であった．
 
 ### UI作成
 次に，UI作成を試みた．[`Google Colab`](https://colab.research.google.com/)でノートブックを新たに作成した．`recbole.jpynb`とした．まず，以下をセルで実行して，フォルダを作成する．
@@ -169,4 +169,40 @@ main GP = 1.0 + 1.0 + 1.0 = 3.0
 sub GP = 0.6 + 0.3 + 0.9 + 0.3 + 0.3 + 0.3 = 2.7
 total GP = 5.7
 ```
-そのため，それらを考慮しする必要があった．新たに，項目`weight`を追加し，各ブキに重みをつけてデータセットを作成した．上の各ギアパワーの詳細は，[API情報:ギアパワー](https://stat.ink/api-info/ability3)から詳しく見ることができる．
+そのため，それらを考慮する必要があった．新たに，項目`weight`を追加し，各ブキに重みをつけてデータセットを作成した．上の各ギアパワーの詳細は，[API情報:ギアパワー](https://stat.ink/api-info/ability3)から詳しく見ることができる．\
+`trainer.py`を更新して，新たなデータセットを作成した．`config.yaml`も更新した．`model: FM, learning_rate: 0.001, train_batch_size: 2048, epochs: 50`で行った．結果を以下に報告する．
+```
+05 Jan 02:19    INFO  best valid : OrderedDict({'auc': 0.6081, 'logloss': 0.671})
+```
+`AUC`が`0.6081`となり，少しだけ改善したが，ほとんど変わらなかった．今回の学習により，`FM-Jan-05-2026_02-15-20.pth`が生成された．`predict.py`も更新し，推論を行った結果を以下に報告する．
+```
+✨ 【sshooter】のおすすめギアパワー TOP10
+--------------------------------------------------
+1位: special_saver             (Score: 0.7831)  ###
+2位: ink_saver_sub             (Score: 0.7680)  ##
+3位: run_speed_up              (Score: 0.7541)  ##
+4位: sub_power_up              (Score: 0.7523)  ##
+5位: ink_resistance_up         (Score: 0.7490)  ##
+6位: stealth_jump              (Score: 0.7456)  #####
+7位: special_charge_up         (Score: 0.7439)  #####
+8位: ninja_squid               (Score: 0.7254)  ##
+9位: ink_saver_main            (Score: 0.7228)  ####
+10位: respawn_punisher          (Score: 0.7166) #
+
+✨ 【liter4k】のおすすめギアパワー TOP10
+--------------------------------------------------
+1位: special_saver             (Score: 0.7650)  ##
+2位: sub_power_up              (Score: 0.7434)  #####
+3位: respawn_punisher          (Score: 0.7231)  ####
+4位: run_speed_up              (Score: 0.7195)  ###
+5位: ink_saver_sub             (Score: 0.7141)  ###
+6位: ink_recovery_up           (Score: 0.7052)  ###
+7位: thermal_ink               (Score: 0.7037)  ##
+8位: drop_roller               (Score: 0.7032)  #
+9位: ninja_squid               (Score: 0.7017)  #
+10位: opening_gambit            (Score: 0.7008) #
+```
+前回同様に，私の評価値と合致しているかどうかを，`#`の数で表している．"liter4k"はかなり改善したように思えるが，"sshooter"の方はいまいちと言った感じだった．以上より，結果だけ見ると，重みを追加しただけではあまり精度に変化は無いようだった．
+
+### ver 3.0
+今度は，精度向上のために，負例サンプリングの導入を考えた．装備していたギアだけではなく，装備していなかったギアを負け扱い(具体的には`flag = 0.0`とする)にした．負例の対象は，装備していなかったギアからランダムに3つほど選んで決めた．`trainer.py`を更新し，`.inter`ファイルを作り直した．\
