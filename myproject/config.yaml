@@ -2,8 +2,15 @@
 USER_ID_FIELD: weapon_id
 ITEM_ID_FIELD: ability_id
 LABEL_FIELD: label
+
+# カラムの読み込み設定
 load_col:
-    inter: [weapon_id, ability_id, mode, stage, label]
+    inter: [weapon_id, ability_id, mode, stage, weight, label]
+
+# 【重要】重み（AP値）をモデルに反映させる設定
+# weightカラムを、学習時のスコアの重みとして使用します
+# これにより、0.3(サブ1)より1.3(メイン1サブ1)の方が「重要」だと学習されます
+numerical_features: ['weight']
 
 # モデルと学習の設定
 model: FM
