@@ -5,30 +5,34 @@
 
 
 ## 2025/12/08
-`Anaconda Prompt` を起動し，
+`conda`を使用するために`Anaconda`を使用する．
+`Anaconda Prompt` を起動し，以下のコマンドを実行．
 ```
 conda activate recbole
 ```
-とコマンド上で実行．\
-`cd` でファイルのある階層に移動できる．\
-`python xxx.py` で`Python`を実行できる．\
+`Linux`のコマンドをメモする．`cd` でファイルのある階層に移動できる．\
+`python xxx.py` で`Python`を実行できる．`pwd`で現在の階層を表示する．\
 `dir` コマンドで，作成した `saved` フォルダを見つける．\
+`touch`でファイルを作成，`mkdir`でフォルダを作成できる．`cat`でファイルの中身を表示．`vi`または`vim`でテキストエディタを開ける．\
 `saved` フォルダ内にある`.pth`を使って，新規ユーザの推薦を行う．`.pth`は`PyTorch`のモデルデータである．\
 `hyper parameter` の設定は，レファレンスを読んで理解する．\
 `epoch`はエポック数であり，これは学習する回数である．エポック数が大きいとき，自前のノートパソコンだと遅すぎて終わらないため，研究室のサーバーを利用する．\
 `.yaml`にはパラメータの詳細を記す．`.yaml`とは，`.html`や`.xml`などのデータ形式のうちの一つ．\
 学習は，何度か試すことで，一番良いパラメータを探す．\
-`TensorBoard` で機械学習の結果を可視化，学習曲線をプロットできる．\
+`TensorBoard` で機械学習の結果を可視化，学習曲線をプロットできる．使用する際は，以下のコマンドを実行
+```
+tensorboard --logdir ./logs
+```
 自前のノートパソコンだと厳しいので，サーバーを使う．\
-サーバーを使う際は，まず以下のコマンドを実行し，鍵を取得する．
+サーバーを使う際は，まず以下のコマンドを実行し，鍵を取得する．`.pub`が作成される．
 ```
 ssh-keygen -t ED25519
 ```
-これで，鍵（秘密鍵、公開鍵）を取得できる．`ssh xxx`でサーバーに接続する．
+これで，鍵（秘密鍵，公開鍵）を取得できる．`ssh xxx`でサーバーに接続する．
 
 
 ## 2025/12/22
-`Python`は仮想環境で行うことを推奨．以下のコマンドを実行し、仮想環境を構築する．
+`Python`は仮想環境(`venv`など)で行うことを推奨．以下のコマンドを実行し，仮想環境を構築する．
 ```
 python -m venv rec_env
 source rec_env/bin/activate
@@ -55,7 +59,12 @@ myproject/
 │   └── splatoon3/
 │       └── splatoon3.inter  # 作成したファイル
 ├── config.yaml              # 設定ファイル
-└── train.py                 # 学習用スクリプト
+├── train.py                 # 学習用スクリプト
+├── predict.py               # 推論用スクリプト
+├── venv/
+│   └── .../                 # 仮想環境
+├── saved/
+└── └── xxx.pth              # PyTorchのモデル
 ```
 
 ## 2026/01/04
@@ -124,4 +133,11 @@ auc : 0.6073    logloss : 0.6711
 !npm install -g localtunnel -q
 ```
 フォルダ内に`app.py`を作成し，アプリケーションのメイン部分とする．`streamlit`というフレームワークを使い，ブラウザ上で動くアプリを作る．`localtunnel`を組み合わせて，一時的にWebアプリを外部公開する．\
-`splatoon3.inter`と`.pth`ファイルを使い，アプリを動かす．
+`splatoon3.inter`と`.pth`ファイルを使い，アプリを動かす．`Colab`上のディレクトリ構造は以下のようである．
+```
+recbole_project/
+├── dataset/
+│   └── splatoon3/
+│       └── splatoon3.inter  # 作成したファイル
+└── xxx.pth                  # PyTorchのモデル
+```
