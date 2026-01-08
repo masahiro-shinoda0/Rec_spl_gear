@@ -24,7 +24,7 @@ conda activate recbole
 - `vi`または`vim`でテキストエディタを開ける
 - `ssh`でサーバーに接続し，`logout`で接続解除
 
-`saved` フォルダ内にある`.pth`を使って，新規ユーザの推薦を行う．`.pth`は`PyTorch`のモデルデータである．\
+学習を行うことで`saved` フォルダ内に作成される`.pth`を使って，新規ユーザの推薦を行う．`.pth`は`PyTorch`のモデルデータである．\
 `hyper parameter` の設定は，レファレンスを読んで理解する．
 ### `RecBole`における`Hyperparameter`設定
 - `Training Settings(訓練設定)`
@@ -142,9 +142,10 @@ pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu13
 ### ver 1.0
 `run.py`を実行してできた`.pth`ファイルをもとに，推論用の`predict.py`を使用して，精度を確かめた．当初の予測精度と推論の結果は以下のようになった．
 ```
-auc : 0.6073    logloss : 0.6711
+05 Jan 00:17    INFO  best valid : OrderedDict({'auc': 0.608, 'logloss': 0.6709})
+05 Jan 00:17    INFO  test result: OrderedDict({'auc': 0.6055, 'logloss': 0.6727})
 
-05 Jan 00:17    INFO  Finished training, best eval result in epoch 23
+学習が終わった？と思う。これはどういう結果？あと、これからどうすればいい？
 ```
 ```
 sshooter
@@ -219,7 +220,8 @@ total GP = 5.7
 そのため，それらを考慮する必要があった．新たに，項目`weight`を追加し，各ブキに重みをつけてデータセットを作成した．上の各ギアパワーの詳細は，[API情報:ギアパワー](https://stat.ink/api-info/ability3)から詳しく見ることができる．\
 `trainer.py`を更新して，新たなデータセットを作成した．`config.yaml`も更新した．`model: FM, learning_rate: 0.001, train_batch_size: 2048, epochs: 50`で行った．結果を以下に報告する．
 ```
-05 Jan 02:19    INFO  best valid : OrderedDict({'auc': 0.6081, 'logloss': 0.671})
+05 Jan 02:19    INFO  best valid : OrderedDict({'auc': 0.6081, 'logloss': 0.671})
+05 Jan 02:19    INFO  test result: OrderedDict({'auc': 0.6047, 'logloss': 0.6731})
 ```
 `AUC`が`0.6081`となり，少しだけ改善したが，ほとんど変わらなかった．今回の学習により，`FM-Jan-05-2026_02-15-20.pth`が生成された．`predict.py`も更新し，推論を行った結果を以下に報告する．
 ```
@@ -253,10 +255,8 @@ liter4k
 今度は，精度向上のために，負例サンプリングの導入を考えた．装備していたギアだけではなく，装備していなかったギアを負け扱い(具体的には`flag = 0.0`とする)にした．負例の対象は，装備していなかったギアからランダムに3つほど選んで決めた．`trainer.py`を更新し，`.inter`ファイルを作り直した．\
 学習した結果は以下のようになった．
 ```
-最終結果: {'best_valid_score': 0.766,
-          'valid_score_bigger': True,
-          'best_valid_result': OrderedDict({'auc': 0.766, 'logloss': 0.5151}),
-          'test_result': OrderedDict({'auc': 0.7656, 'logloss': 0.5159})}
+05 Jan 03:23    INFO  best valid : OrderedDict({'auc': 0.766, 'logloss': 0.5151})
+05 Jan 03:23    INFO  test result: OrderedDict({'auc': 0.7656, 'logloss': 0.5159})
 ```
 `AUC`が`0.766`となり，ver1.0，ver2.0よりも改善したのがわかる．また，今回の学習で`FM-Jan-05-2026_03-17-27.pth`が生成された．\
 次に，`predict.py`を改変した．使用したギアの特化度を偏差として計算し，それを考慮に入れた．すなわち，よく使われるギアは負の値に，珍しいギアは正の値に補正された．以下に推論結果を報告する．
