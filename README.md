@@ -13,8 +13,8 @@ conda activate recbole
 ```
 ### UNIX/Linuxコマンド一覧
 `Linux`のコマンドをメモする．以下，コマンドをまとめた表である．
-- `cd`:  でファイルのある階層に移動
-- `python xxx.py` で`Python`を実行
+- `cd`でファイルのある階層に移動
+- `python xxx.py`で`Python`を実行
 - `pwd`で現在の階層を表示する
 - `dir`でファイルを一覧表示
 - `touch`でファイルを作成
@@ -25,7 +25,24 @@ conda activate recbole
 - `ssh`でサーバーに接続し，`logout`で接続解除
 
 `saved` フォルダ内にある`.pth`を使って，新規ユーザの推薦を行う．`.pth`は`PyTorch`のモデルデータである．\
-`hyper parameter` の設定は，レファレンスを読んで理解する．\
+`hyper parameter` の設定は，レファレンスを読んで理解する．
+### `RecBole`の`Hyperparameter`設定
+- `Training Settings(訓練設定)`
+  - `learning_rate`：学習率
+  - `train_batch_size`：一度に計算するデータのサイズ
+  - `learner`：最適化アルゴリズム
+  - `epochs`：学習回数
+- `Model Settings(モデル設定)`
+  - `embedding_size`：ベクトルの次元数
+  - `n_layers`：ニューラルネットワークの層の数
+  - `droptout_prob`：過学習防止のため，ランダムに計算を休止する割合
+- `Evaluation Settings(評価設定)`
+
+### その他まとめ
+- `Parameters`と`Hyperparameters`
+  - `Parameters`とは，モデルが学習を通して更新する値．例として，ニューラルネットワークの重みやバイアス
+  - `Hyperparameters`とは，学習を始める前に決めておく値．例として，`learning_reta(学習率)`，`epochs(学習回数)`
+
 `epoch`はエポック数であり，これは学習する回数である．エポック数が大きいとき，自前のノートパソコンだと遅すぎて終わらないため，研究室のサーバーを利用する．\
 `.yaml`にはパラメータの詳細を記す．`.yaml`とは，`.html`や`.xml`などのデータ形式のうちの一つ．\
 学習は，何度か試すことで，一番良いパラメータを探す．\
@@ -58,10 +75,10 @@ pip install recbole
 
 
 ## 2025/12/23
-`Nintendo Switch`のゲームソフト`Splatoon 3`において，ブキとルール，ステージを選択したら，おすすめのギアパワーを教えてくれる推薦システムを作りたい．\
-まずは，`dataset`を作成する．`splatoon 3`の詳細なバトル結果を入手したいので，`stat.ink`よりデータをダウンロードする．[ここ](https://stat.ink/downloads)からダウンロードできる．\
-`splatoon 3`では，各シーズンごとに調整が入るため，直近1週間ほどのデータからデータセットを作成する．ためしに直近1週間分(2025-12-15から2025-12-21)のデータでデータセットを作成したら，約66万件と十分なデータを得ることができた．\
-データセットは，`weapon_id`(ブキ)，`mode`(ルール)，`stage`(ステージ)，'ability_id'(ギアパワー)，`label`(勝ち負け)をそれぞれ記述する．勝ち負けについては，勝ちを`label=1.0`，負けを`label=0.0`として`flag`を作成する．\
+`Nintendo Switch`のゲームソフト`Splatoon3`において，ブキとルール，ステージを選択したら，おすすめのギアパワーを教えてくれる推薦システムを作りたい．\
+まずは，`dataset`を作成する．`Splatoon3`の詳細なバトル結果を入手したいので，`stat.ink`よりデータをダウンロードする．[ここ](https://stat.ink/downloads)からダウンロードできる．\
+`Splatoon3`では，各シーズンごとに調整が入るため，直近1週間ほどのデータからデータセットを作成する．ためしに直近1週間分(`2025-12-15`から`2025-12-21`)のデータでデータセットを作成したら，約66万件と十分なデータを得ることができた．\
+データセットは，`weapon_id(ブキ)`，`mode(ルール)`，`stage(ステージ)`，`ability_id(ギアパワー)`，`label(勝ち負け)`をそれぞれ記述する．勝ち負けについては，勝ちを`label=1.0`，負けを`label=0.0`として`flag`を作成する．\
 `trainer.py`で作成したデータセット`splatoon3.inter`を用いて，モデルを作成する．`train.py`と`config.yaml`を使って，サーバー上で実行してモデルを作成する．\
 以下のようにディレクトリを構成した．
 ```
@@ -111,7 +128,7 @@ auc : 0.6073    logloss : 0.6711
 05 Jan 00:17    INFO  Finished training, best eval result in epoch 23
 ```
 ```
---- sshooter のおすすめギアパワー TOP10 ---
+sshooter
 1: comeback             (Score: 0.5176)  ##
 2: ink_resistance_up    (Score: 0.4962)  #
 3: stealth_jump         (Score: 0.4809)  #####
@@ -123,7 +140,7 @@ auc : 0.6073    logloss : 0.6711
 9: object_shredder      (Score: 0.4609)  #
 10: quick_respawn        (Score: 0.4563) ####
 
---- liter4k のおすすめギアパワー TOP10 ---
+liter4k
 1: drop_roller          (Score: 0.5592)  #
 2: special_saver        (Score: 0.5394)  ##
 3: haunt                (Score: 0.5373)  #
@@ -135,7 +152,7 @@ auc : 0.6073    logloss : 0.6711
 9: stealth_jump         (Score: 0.5077)  #
 10: ink_saver_main       (Score: 0.5068) ##
 ```
-私のゲームの経験から，予測が正しいと思うものには`#`の数でチェックを入れている．また，この時使用していた`config.yaml`の設定は，`model: FM, learningrate: 0.001, train_batch_size: 2048, epochs: 50`であった．
+私のゲームの経験から，予測が正しいと思うものには`#`の数でチェックを入れている．また，この時使用していた`config.yaml`の設定は，`model: FM, learning_rate: 0.001, train_batch_size: 2048, epochs: 50`であった．
 
 ### UI作成
 次に，UI作成を試みた．[`Google Colab`](https://colab.research.google.com/)でノートブックを新たに作成した．`recbole.jpynb`とした．まず，以下をセルで実行して，フォルダを作成する．
@@ -167,6 +184,7 @@ myproject/
 ver 1.0 で作成したデータセットの`splatoon3.inter`には致命的なデータの欠落があった．それは，ユーザーのギアパワーが考慮されていない点である．ユーザーのギアパワーが考慮されていないため，ギアパワーがすべて同じ値として処理されていた．\
 スプラトゥーン3では，メインギアパワー(以下メインGP)の`1.0*3 = 3.0`とサブギアパワー(以下サブGP)の`0.3*3*3 = 2.7`の合計'5.7GP'が用意されている．例えば，以下のような組み合わせがある．
 ```
+# 例えば，52gal(52ガロン)のギア構成
 swim_speed_up = 1.6         # イカダッシュ速度アップ
 quick_respawn = 1.3         # 復活時間短縮
 stealth_jump = 1.0          # ステルスジャンプ
@@ -186,31 +204,29 @@ total GP = 5.7
 ```
 `AUC`が`0.6081`となり，少しだけ改善したが，ほとんど変わらなかった．今回の学習により，`FM-Jan-05-2026_02-15-20.pth`が生成された．`predict.py`も更新し，推論を行った結果を以下に報告する．
 ```
-✨ 【sshooter】のおすすめギアパワー TOP10
---------------------------------------------------
-1位: special_saver             (Score: 0.7831)  ###
-2位: ink_saver_sub             (Score: 0.7680)  ##
-3位: run_speed_up              (Score: 0.7541)  ##
-4位: sub_power_up              (Score: 0.7523)  ##
-5位: ink_resistance_up         (Score: 0.7490)  ##
-6位: stealth_jump              (Score: 0.7456)  #####
-7位: special_charge_up         (Score: 0.7439)  #####
-8位: ninja_squid               (Score: 0.7254)  ##
-9位: ink_saver_main            (Score: 0.7228)  ####
-10位: respawn_punisher          (Score: 0.7166) #
+sshooter
+1: special_saver             (Score: 0.7831)  ###
+2: ink_saver_sub             (Score: 0.7680)  ##
+3: run_speed_up              (Score: 0.7541)  ##
+4: sub_power_up              (Score: 0.7523)  ##
+5: ink_resistance_up         (Score: 0.7490)  ##
+6: stealth_jump              (Score: 0.7456)  #####
+7: special_charge_up         (Score: 0.7439)  #####
+8: ninja_squid               (Score: 0.7254)  ##
+9: ink_saver_main            (Score: 0.7228)  ####
+10: respawn_punisher          (Score: 0.7166) #
 
-✨ 【liter4k】のおすすめギアパワー TOP10
---------------------------------------------------
-1位: special_saver             (Score: 0.7650)  ##
-2位: sub_power_up              (Score: 0.7434)  #####
-3位: respawn_punisher          (Score: 0.7231)  ####
-4位: run_speed_up              (Score: 0.7195)  ###
-5位: ink_saver_sub             (Score: 0.7141)  ###
-6位: ink_recovery_up           (Score: 0.7052)  ###
-7位: thermal_ink               (Score: 0.7037)  ##
-8位: drop_roller               (Score: 0.7032)  #
-9位: ninja_squid               (Score: 0.7017)  #
-10位: opening_gambit            (Score: 0.7008) #
+liter4k
+1: special_saver             (Score: 0.7650)  ##
+2: sub_power_up              (Score: 0.7434)  #####
+3: respawn_punisher          (Score: 0.7231)  ####
+4: run_speed_up              (Score: 0.7195)  ###
+5: ink_saver_sub             (Score: 0.7141)  ###
+6: ink_recovery_up           (Score: 0.7052)  ###
+7: thermal_ink               (Score: 0.7037)  ##
+8: drop_roller               (Score: 0.7032)  #
+9: ninja_squid               (Score: 0.7017)  #
+10: opening_gambit            (Score: 0.7008) #
 ```
 前回同様に，私の評価値と合致しているかどうかを，`#`の数で表している．"liter4k"はかなり改善したように思えるが，"sshooter"の方はいまいちと言った感じだった．以上より，結果だけ見ると，重みを追加しただけではあまり精度に変化は無いようだった．
 
@@ -226,7 +242,7 @@ total GP = 5.7
 `AUC`が`0.766`となり，ver1.0，ver2.0よりも改善したのがわかる．また，今回の学習で`FM-Jan-05-2026_03-17-27.pth`が生成された．\
 次に，`predict.py`を改変した．使用したギアの特化度を偏差として計算し，それを考慮に入れた．すなわち，よく使われるギアは負の値に，珍しいギアは正の値に補正された．以下に推論結果を報告する．
 ```
-✨ 【52gal】の特化度（リフト値）ランキング
+52gal
 ---------------------------------------------------------------------------
 順位   | ギアパワー名                    | 予測スコア      | 特化度(偏差)
 ---------------------------------------------------------------------------
