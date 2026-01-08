@@ -26,7 +26,7 @@ conda activate recbole
 
 `saved` フォルダ内にある`.pth`を使って，新規ユーザの推薦を行う．`.pth`は`PyTorch`のモデルデータである．\
 `hyper parameter` の設定は，レファレンスを読んで理解する．
-### `RecBole`の`Hyperparameter`設定
+### `RecBole`における`Hyperparameter`設定
 - `Training Settings(訓練設定)`
   - `learning_rate`：学習率
   - `train_batch_size`：一度に計算するデータのサイズ
@@ -37,11 +37,30 @@ conda activate recbole
   - `n_layers`：ニューラルネットワークの層の数
   - `droptout_prob`：過学習防止のため，ランダムに計算を休止する割合
 - `Evaluation Settings(評価設定)`
+  - `topk`：推薦リストに出す件数
+  - `metrics`：評価指数の種類．例として，`Recall`，`NDCG`
+  - `valid_metrics`：どの指標を基準としてモデルを選ぶか．例として，`Recall@10`
+- `Dataset Settings(データセット設定)`
+  - `load_col`：データとして扱う列
+  - `USER_ID_FIELD`：ユーザーIDの列名
 
 ### その他まとめ
 - `Parameters`と`Hyperparameters`
   - `Parameters`とは，モデルが学習を通して更新する値．例として，ニューラルネットワークの重みやバイアス
   - `Hyperparameters`とは，学習を始める前に決めておく値．例として，`learning_reta(学習率)`，`epochs(学習回数)`
+- 推論・評価指数\
+評価指数は，[公式ドキュメント](https://recbole.io/docs/recbole/recbole.evaluator.metrics.html)より詳細を確認できる
+  - `Recall`：再現率
+  - `Precision`：適合率
+  - `NDCG`：順位指数
+  - `MRR`：正解がどれだけ高順位か
+  - `Hit Ratio`：正解の割合
+  - `AUC(Area Under Curve)`：`1.0`に近い程良い．ランダムで`0.5`
+  - `LogLoss(logistic loss)`：`0`に近い程良い．
+- モデル\
+モデル設定は，[公式ドキュメント](https://www.recbole.io/model_list.html)より詳細を確認できる．以下，例を紹介する
+  - [`FM(Factorization Machines)`](https://www.recbole.io/docs/user_guide/model/context/fm.html)：複数のデータの特徴量を計算
+  - `GRU4Rec`：ユーザーの行動履歴をもとに評価
 
 `epoch`はエポック数であり，これは学習する回数である．エポック数が大きいとき，自前のノートパソコンだと遅すぎて終わらないため，研究室のサーバーを利用する．\
 `.yaml`にはパラメータの詳細を記す．`.yaml`とは，`.html`や`.xml`などのデータ形式のうちの一つ．\
