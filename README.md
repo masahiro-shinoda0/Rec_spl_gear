@@ -58,6 +58,7 @@ conda activate recbole
   - `Hit Ratio`：正解の割合
   - `AUC(Area Under Curve)`：`1.0`に近い程良い．ランダムで`0.5`
   - `LogLoss(logistic loss)`：`0`に近い程良い．
+  - 評価指数には，`Pointwise指標`と`Ranking指標`の2種類ある．前者では，点推定を行うため，1点ずつの正解不正解を計算．`AUC`や`LogLoss`などである．後者では，順位を評価する．`Recall`，`Precision`，`NDCG`などである．
 - モデル\
 モデル設定は，[公式ドキュメント](https://www.recbole.io/model_list.html)より詳細を確認できる．以下，例を紹介する
   - [`FM(Factorization Machines)`](https://www.recbole.io/docs/user_guide/model/context/fm.html)：複数のデータの特徴量を計算
