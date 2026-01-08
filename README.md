@@ -87,7 +87,7 @@ source rec_env/bin/activate
 ```
 pip install recbole
 ```
-`Python 3.13`だと，新しすぎて`PyTorch`などが対応していなく，エラーが起きる．その為，仮想環境を使ったうえで，`Python3`のライブラリを直接書き換える．\
+`Python 3.13`だと，新しすぎて`PyTorch`などが対応していなく，エラーが起きる．その為，仮想環境を使ったうえで，`Python3`のライブラリを直接書き換えることを試みる．\
 `PyTorch`で学習していると，早期終了`Early Stopping`することがある．これは，過学習を防ぐためである．\
 サーバーでは，`vim`を使ってプログラムファイルを作る．`touch test.py`と適当にファイルを作ったら，`vi test.py`としてターミナル上で`vim`を開く．`i`と打つことで，編集ができる．やめるときは，`escape`を押し，閉じるときは`:wq`とする．`:aqw`とする場合もある．サーバーを閉じるときは，`exit`とする．\
 `VS Code`は，拡張機能の`Remote - SSH`で接続することができる．エクスプローラーより，任意のフォルダを開いて使う．
@@ -144,8 +144,6 @@ pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu13
 ```
 05 Jan 00:17    INFO  best valid : OrderedDict({'auc': 0.608, 'logloss': 0.6709})
 05 Jan 00:17    INFO  test result: OrderedDict({'auc': 0.6055, 'logloss': 0.6727})
-
-学習が終わった？と思う。これはどういう結果？あと、これからどうすればいい？
 ```
 ```
 sshooter
@@ -217,7 +215,7 @@ main GP = 1.0 + 1.0 + 1.0 = 3.0
 sub GP = 0.6 + 0.3 + 0.9 + 0.3 + 0.3 + 0.3 = 2.7
 total GP = 5.7
 ```
-そのため，それらを考慮する必要があった．新たに，項目`weight`を追加し，各ブキに重みをつけてデータセットを作成した．上の各ギアパワーの詳細は，[API情報:ギアパワー](https://stat.ink/api-info/ability3)から詳しく見ることができる．\
+そのため，それらを考慮する必要があった．新たに，項目`weight`を追加し，各ブキに重みをつけてデータセットを作成した．上のような各ギアパワーの詳細は，[API情報:ギアパワー](https://stat.ink/api-info/ability3)から詳しく見ることができる．\
 `trainer.py`を更新して，新たなデータセットを作成した．`config.yaml`も更新した．`model: FM, learning_rate: 0.001, train_batch_size: 2048, epochs: 50`で行った．結果を以下に報告する．
 ```
 05 Jan 02:19    INFO  best valid : OrderedDict({'auc': 0.6081, 'logloss': 0.671})
