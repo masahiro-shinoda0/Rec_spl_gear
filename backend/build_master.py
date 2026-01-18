@@ -1,63 +1,61 @@
 import sqlite3
 import requests
 
-# 保存先のデータベース名
 DB_NAME = "splatoon3_master.db"
 
-# stat.ink APIの一覧
+# JSONデータを直接返してくれるエンドポイントに修正
 ENDPOINTS = {
-    "abilities": "https://stat.ink/api-info/ability3",
-    "stages": "https://stat.ink/api-info/stage3",
-    "weapons": "https://stat.ink/api-info/weapon3",
-    "rules": "https://stat.ink/api-info/rule3"
+    "abilities": "https://stat.ink/api/v3/ability",
+    "stages": "https://stat.ink/api/v3/stage",
+    "weapons": "https://stat.ink/api/v3/weapon",
+    "rules": "https://stat.ink/api/v3/rule"
 }
 
-def setup_db():
+def build():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
 
-    # テーブル作成 (トークンを主キーにする)
+    cursor.execute("DROP TABLE IF EXISTS master_data")
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS master_data (
+        CREATE TABLE master_data (
             category TEXT,
             key TEXT PRIMARY KEY,
             name_ja TEXT,
             name_en TEXT
         )
     ''')
-    conn.commit()
-    return conn
 
-def fetch_and_save(conn):
-    cursor = conn.cursor()
-    
     for category, url in ENDPOINTS.items():
-        print(f"Fetching {category} from stat.ink...")
+        print(f"Fetching {category}...")
         try:
-            response = requests.get(url)
-            response.raise_for_status()
-            data = response.json()
+            # stat.inkのAPIはUser-Agentがないと拒否される場合があるため追加
+            headers = {"User-Agent": "Splatoon3-Rec-System-Agent"}
+            res = requests.get(url, headers=headers, timeout=10)
+            res.raise_for_status()
+            data = res.json()
 
+            count = 0
             for item in data:
-                # トークン(key)、日本語名、英語名を取得
                 key = item.get('key')
+                # 名前データ（ja_JP, en_US）を取得
                 name_ja = item.get('name', {}).get('ja_JP', key)
                 name_en = item.get('name', {}).get('en_US', key)
 
                 if key:
-                    cursor.execute('''
-                        INSERT OR REPLACE INTO master_data (category, key, name_ja, name_en)
-                        VALUES (?, ?, ?, ?)
-                    ''', (category, key, name_ja, name_en))
+                    cursor.execute(
+                        "INSERT OR REPLACE INTO master_data VALUES (?, ?, ?, ?)",
+                        (category, key, name_ja, name_en)
+                    )
+                    count += 1
             
-            print(f"Successfully saved {len(data)} items to {category}.")
+            print(f"  -> Successfully saved {count} items.")
+            
         except Exception as e:
-            print(f"Error fetching {category}: {e}")
+            print(f"  -> Error fetching {category}: {e}")
 
     conn.commit()
+    conn.close()
+    print("\nFinish! Database is updated.")
 
 if __name__ == "__main__":
-    connection = setup_db()
-    fetch_and_save(connection)
-    connection.close()
-    print(f"\nCompleted! Database saved as {DB_NAME}")
+    build()
