@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+rec_env/
+*.pyc
+
+# ML Models & Data (大容量ファイルが生成されるディレクトリを丸ごと除外)
+saved/
+data/
+log/
+
+# Mac
+.DS_Store
