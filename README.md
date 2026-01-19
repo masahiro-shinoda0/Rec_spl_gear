@@ -2,7 +2,8 @@
 [`RecBole`](https://www.recbole.io/index.html)を使ったゼミの課題に取り組むうえで，気になったことを以下に書き記す．\
 2025/12/08に作成．`sinki.py`と`sinki.yaml`は動かない．\
 2025/12/22から，[`stat.ink`](https://stat.ink/)のデータを利用した推薦システムの作成を開始．\
-2026/01/06から，[`Google Colab`](https://colab.research.google.com/)上で動く[`Streamlit`](https://streamlit.io/)を利用したUIの作成を開始．
+2026/01/06から，[`Google Colab`](https://colab.research.google.com/)上で動く[`Streamlit`](https://streamlit.io/)を利用したUIの作成を開始．\
+2026/01/18から，[`FastAPI`](https://fastapi.tiangolo.com/)をバックエンドに使用したWebアプリケーションの作成を開始．
 
 
 ## 2025/12/08
@@ -542,7 +543,7 @@ Rank 5 (Score: 1.0000)
 まずは，1:9の割合で，実負例データを混ぜた，その時の学習の結果と，推論の結果を以下に報告する．
 ```
 best valid : OrderedDict({'auc': 0.9485, 'logloss': 0.2212, 'rmse': 0.2493})
-INFO  test result: OrderedDict({'auc': 0.9439, 'logloss': 0.2322, 'rmse': 0.2553})
+test result: OrderedDict({'auc': 0.9439, 'logloss': 0.2322, 'rmse': 0.2553})
 ```
 ```
 --- Top 10 Gear Sets for 52gal ---
@@ -567,3 +568,32 @@ Rank 5 (Score: 0.9651)
   Sub : ink_recovery_up:0.6, ink_saver_sub:0.9, sub_power_up:0.3
 ------------------------------
 ```
+また，3:7の割合にすると，以下のようになった．
+```
+best valid : OrderedDict({'auc': 0.8501, 'logloss': 0.3981, 'rmse': 0.3618})
+test result: OrderedDict({'auc': 0.8434, 'logloss': 0.4049, 'rmse': 0.364})
+```
+```
+--- Top 10 Gear Sets for 52gal ---
+Rank 1 (Score: 0.9236)
+  Main: comeback, ninja_squid, stealth_jump
+  Sub : ink_resistance_up:0.3, special_saver:0.9, sub_resistance_up:0.6, swim_speed_up:0.9
+------------------------------
+Rank 2 (Score: 0.9124)
+  Main: comeback, ninja_squid, stealth_jump
+  Sub : quick_super_jump:0.9, special_saver:0.3, sub_resistance_up:0.6, swim_speed_up:0.9
+------------------------------
+Rank 3 (Score: 0.9109)
+  Main: quick_respawn, opening_gambit, stealth_jump
+  Sub : ink_resistance_up:0.6, quick_respawn:0.9
+------------------------------
+Rank 4 (Score: 0.9097)
+  Main: drop_roller, respawn_punisher, tenacity
+  Sub : intensify_action:0.3, quick_respawn:0.3, quick_super_jump:0.9, sub_resistance_up:0.3
+------------------------------
+Rank 5 (Score: 0.9096)
+  Main: ninja_squid, opening_gambit, stealth_jump
+  Sub : quick_super_jump:0.9, special_saver:0.3, sub_resistance_up:0.6, swim_speed_up:0.9
+------------------------------
+```
+どれも納得のいく答えになっているが，もう一押しする．今はブキのみを指定しているので，ブキ，ルール，ステージを指定して推薦してみる．
