@@ -109,7 +109,8 @@ pip install recbole
 `VS Code`は，拡張機能の`Remote - SSH`で接続することができる．エクスプローラーより，任意のフォルダを開いて使う．
 
 
-
+まずは，`RecBole`による動作を確かめるためにも，単純なギア推薦を行った．\
+[/src/readme/rec_simple.md](/src/readme/rec_simple.md)
 
 
 ## 2026/01/18
