@@ -17,6 +17,11 @@
 conda activate recbole
 ```
 これは自前ノートパソコンで`RecBole`を使用するために用いたためであり，以降ではサーバーに仮想環境を構築して行ったため，`Anaconda`は使用していない．
+
+## RecBoleについて
+`RecBole`とは，`PyTorch`ベースの，推薦アルゴリズムのライブラリである．推薦アルゴリズムのライブラリは，他に`Recommenders`や`Spotlight`などがある．\
+[RecBoleの公式ドキュメント](https://www.recbole.io/docs/)を参照して，`Parameter Tuning`等を行う．
+
 ### UNIX/Linuxコマンド一覧
 `Linux`のコマンドをメモする．以下，コマンドをまとめた表である．まずは，基本的なもの．
 - 基本的なコマンド
