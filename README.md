@@ -42,6 +42,7 @@ conda activate recbole
   - `vim`を閉じるときは`:wq`または`:aqw`
   - `ssh`でサーバーに接続し，`logout`で接続解除
   - `grep`で指定した単語の出現回数を数える
+  - `Ctrl`+`C`で強制終了
 
 学習を行うことで`saved` フォルダ内に作成される`.pth`を使って，推薦を行う．`.pth`は`PyTorch`のモデルデータである．\
 `Hyperparameter` の設定は，以下を確認．
