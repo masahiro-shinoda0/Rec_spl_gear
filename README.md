@@ -1,4 +1,4 @@
-# recboletest
+# recboleを用いた推薦システムの作成
 [`RecBole`](https://www.recbole.io/index.html)を使ったゼミの課題に取り組むうえで，気になったことを以下に書き記す．\
 2025/12/08に作成．`sinki.py`と`sinki.yaml`は動かない．\
 2025/12/22から，[`stat.ink`](https://stat.ink/)のデータを利用した推薦システムの作成を開始．\
@@ -28,8 +28,8 @@ conda activate recbole
 - `ssh`でサーバーに接続し，`logout`で接続解除
 - `grep`で指定した単語の出現回数を数える
 
-学習を行うことで`saved` フォルダ内に作成される`.pth`を使って，新規ユーザの推薦を行う．`.pth`は`PyTorch`のモデルデータである．\
-`hyper parameter` の設定は，レファレンスを読んで理解する．
+学習を行うことで`saved` フォルダ内に作成される`.pth`を使って，推薦を行う．`.pth`は`PyTorch`のモデルデータである．\
+`hyper parameter` の設定は，以下を確認．
 ### `RecBole`における`Hyperparameter`設定
 `RecBole`の[公式ドキュメント](https://recbole.io/docs/user_guide/usage/parameter_tuning.html)より詳細を確認できる．
 - `Training Settings(訓練設定)`
@@ -78,14 +78,11 @@ conda activate recbole
 - [スプラトゥーン3の武器一覧](https://stat.ink/api-info/weapon3)
 - [スプラトゥーン3のギアパワー一覧](https://stat.ink/api-info/ability3)
 
-`epoch`はエポック数であり，これは学習する回数である．エポック数が大きいとき，自前のノートパソコンだと遅すぎて終わらないため，研究室のサーバーを利用する．\
 `.yaml`にはパラメータの詳細を記す．`.yaml`とは，`.html`や`.xml`などのデータ形式のうちの一つ．\
-学習は，何度か試すことで，一番良いパラメータを探す．\
 `TensorBoard` で機械学習の結果を可視化，学習曲線をプロットできる．[公式ドキュメント](https://recbole.io/docs/user_guide/usage/use_tensorboard.html)に使い方が詳細に書かれている．使用する際は，以下のコマンドを実行
 ```
 tensorboard --logdir ./logs
 ```
-自前のノートパソコンだと厳しいので，サーバーを使う．\
 サーバーを使う際は，まず以下のコマンドを実行し，鍵を取得する．`.pub`が作成される．
 ```
 ssh-keygen -t ED25519
@@ -103,9 +100,9 @@ source rec_env/bin/activate
 ```
 pip install recbole
 ```
-`Python 3.13`だと，新しすぎて`PyTorch`などが対応していなく，エラーが起きる．その為，仮想環境を使ったうえで，`Python3`のライブラリを直接書き換えることを試みる．\
-`PyTorch`で学習していると，早期終了`Early Stopping`することがある．これは，過学習を防ぐためである．\
-サーバーでは，`vim`を使ってプログラムファイルを作る．`touch test.py`と適当にファイルを作ったら，`vi test.py`としてターミナル上で`vim`を開く．`i`と打つことで，編集ができる．やめるときは，`escape`を押し，閉じるときは`:wq`とする．`:aqw`とする場合もある．サーバーを閉じるときは，`exit`とする．\
+`Python 3.13`だと，`PyTorch`などが`Recbole`に対応していため，エラーが発生．その為，仮想環境を使ったうえで，`Python3`のライブラリを直接書き換えることを試みる．\
+また，`PyTorch`で学習の際，早`Early Stopping`となることがある．これは，過学習を防ぐための早期終了である．\
+サーバーでは，`vim`を使ってプログラムファイルを作る．`touch test.py`と適当にファイルを作ったら，`vi test.py`としてターミナル上で`vim`を開く．`i`と打つことで，編集ができる．やめるときは，`escape`を押し，閉じるときは`:wq`とする．`:aqw`とする場合もある．\
 `VS Code`は，拡張機能の`Remote - SSH`で接続することができる．エクスプローラーより，任意のフォルダを開いて使う．
 
 
