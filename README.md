@@ -110,7 +110,7 @@ pip install recbole
 
 
 まずは，`RecBole`による動作を確かめるためにも，単純なギア推薦を行った．\
-[/src/readme/rec_simple.md](/src/readme/rec_simple.md)
+[/src/readme/simple_rec.md](/src/readme/simple_rec.md)
 
 
 ## 2026/01/18
