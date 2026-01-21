@@ -1,29 +1,52 @@
 ## 2025/12/23
-`Nintendo Switch`のゲームソフト`Splatoon3`において，ブキとルール，ステージを選択したら，おすすめのギアパワーを教えてくれる推薦システムを作りたい．\
-まずは，`dataset`を作成する．`Splatoon3`の詳細なバトル結果を入手したいので，`stat.ink`よりデータをダウンロードする．[https://stat.ink/downloads](https://stat.ink/downloads)からダウンロードできる．\
-`Splatoon3`では，各シーズンごとに調整が入るため，直近1週間ほどのデータからデータセットを作成する．ためしに直近1週間分(`2025-12-15`から`2025-12-21`)のデータでデータセットを作成したら，約66万件と十分なデータを得ることができた．\
+`Nintendo Switch`のゲームソフト`Splatoon3`において，ブキ，ルール，ステージを選択したら，おすすめのギアパワーを教えてくれる推薦システムを作成する．
+
+以下の画像は，`splatoon3`におけるブキ，装備の選択画面である．下にブキ，アタマ，フク，クツとあるのがわかる．アタマ，フク，クツが装備である．
+
+<p align="center">
+  <img src="images/spl_gear_set.jpg" width="600" alt="spl_gear_set.jpg">
+</p>
+
+装備には`ギア`という効果が付く．以下に，上の画像の装備の部分だけを拡大したものを載せる．
+
+<p align="center">
+  <img src="images/spl_gear_up.jpg" width="600" alt="spl_gear_up.jpg">
+</p>
+
+この画像を例にして，ギアを紹介する．アタマに付いているギアに注目する．左から`イカダッシュ速度アップ`，`スペシャル減少量ダウン`，`インク効率アップ`，`インク効率アップ`である．一番左の`イカダッシュ速度アップ`だけ少し大きいサイズなのがわかる．これがメインギアパワーであり，`GP(ギアパワー)`は`1.0`となる．その他の3つはサブギアパワーとなり，`GP`は`0.3`である．これがフク，クツにもそれぞれあるので，トータルギアパワーは`(1.0+0.3+0.3+0.3)*3=5.7`となる．
+
+リンク
+- [スプラトゥーン3公式サイト](https://www.nintendo.com/jp/switch/av5ja/index.html)
+- [スプラトゥーン公式X(通称イカ研)](https://x.com/SplatoonJP)
+
+推薦システムの作成手順として，以下のように進める．
+1. stat.inkのAPIよりデータをダウンロード
+2. データセットを作成する．`trainer.py`を用いて，`.inter`を作成．
+3. 作成したデータセットと，`.yaml`，`.hyper`を用いて，学習をする．モデルを選定し，`run.py`より学習．
+4. 学習結果を見て，そのモデルを使うか決める．不足なら，1. に戻る．
+5. 作成したモデル`.pth`を用いて，推薦を行う．
+
+まずは，`dataset`を作成する．`Splatoon3`の詳細なバトル結果を入手したいので，`stat.ink`よりデータをダウンロードする．[stat.ink統計情報ダウンロード](https://stat.ink/downloads)からダウンロードできる．\
+`Splatoon3`では，各シーズンごとに調整が入るため，直近1週間ほどのデータからデータセットを作成する．試しに直近1週間分(`2025-12-15`から`2025-12-21`)のデータでデータセットを作成したら，約66万件と十分なデータを得ることができた．
+
 データセットは，`weapon_id(ブキ)`，`mode(ルール)`，`stage(ステージ)`，`ability_id(ギアパワー)`，`label(勝ち負け)`をそれぞれ記述する．勝ち負けについては，勝ちを`label=1.0`，負けを`label=0.0`として`flag`を作成する．\
-`trainer.py`で作成したデータセット`splatoon3.inter`を用いて，モデルを作成する．`train.py`と`config.yaml`を使って，サーバー上で実行してモデルを作成する．\
+`trainer.py`で作成したデータセット`splatoon3.inter`を用いて，モデルを作成する．`train.py`と`config.yaml`を使って，サーバー上で実行してモデルを作成する．
+
 以下のようにディレクトリを構成した．
 ```
 myproject/
 ├── dataset/
 │   └── splatoon3/
 │   │   └── splatoon3.inter  # 作成したデータセット
-│   └── splatoon3_xmatch/
-│   │   └── splatoon3_xmatch.inter  # 作成したデータセット
-│   └── splatoon3_xmatch_onlywin/
-│       └── splatoon3_xmatch_onlywin.inter  # 作成したデータセット
 ├── config.yaml              # 設定ファイル
 ├── train.py                 # 学習用スクリプト
 ├── predict.py               # 推論用スクリプト
-├── venv/
-│   └── .../                 # 仮想環境
 ├── saved/
-└── └── xxx.pth              # PyTorchのモデル
+└── └── xxx.pth              # PyTorchのモデルはここに作成される
 ```
 
 ## 2026/01/04
+初めて`RecBole`を用いるときは，以下のようなエラーが起きる．その時の対処を書き記す．
 `ModuleNotFoundError: No module named 'ray'`このエラーが起きたら，以下のコマンドを実行する．
 ```
 pip install ray
@@ -36,11 +59,11 @@ pip install pyarrow
 ```
 pip install pydantic
 ```
-仮想環境のアクティベートはこれを実行．
+仮想環境(`venv`など)の階層に入り，以下を実行することで仮想環境を使用できる．
 ```
 source bin/activate
 ```
-うまくいかないときは，以下を試す．仮想環境で行う．まず，`PyTorch`のバージョンを指定して実行．
+うまくいかないときは，以下を試す．必ず仮想環境で行う．まず，`PyTorch`のバージョンを指定して実行．
 ```
 pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu130
 ```
@@ -246,7 +269,7 @@ test result: OrderedDict({'auc': 0.841, 'logloss': 0.4255})
 データセットを少し改良した．まず，サンプル数を2倍にした．`2025-12-15`から`2025-12-28`までの2週間分を元データとした．また，負例サンプリングをブキ当たり5個から12個に増やした．そうすることでよりランダムになりバイアスが消えると思われる．以下に学習の結果を報告する．
 ```
 best valid : OrderedDict({'auc': 0.898, 'logloss': 0.2979})
- test result: OrderedDict({'auc': 0.8992, 'logloss': 0.2961})
+test result: OrderedDict({'auc': 0.8992, 'logloss': 0.2961})
 ```
 `AUC: 0.899`，`LogLoss: 0.29`となり，非常に高水準に推論ができるようになった．また，今回の学習で`saved/FM-Jan-08-2026_03-48-50.pth`が作成された．\
 次に`predict.py`を少し変える．変えると言っても，特化度を用いた結果と，用いない素のままの結果の両方を表示するようにしただけである．`52gal(52ガロン)`についての結果は以下のようになった．
@@ -322,7 +345,7 @@ grep "52gal" dataset/splatoon3_xmatch/splatoon3_xmatch.inter | grep "area" | gre
 ### 負例サンプリングについて
 負例サンプリングをしないでデータセットを作成したらどうなるか，試してみた．`splatoon3_xmatch_onlywin.inter`とし，学習したところ，結果は以下のようになった．
 ```
- best valid : OrderedDict({'auc': 0.6474, 'logloss': 0.6503})
+best valid : OrderedDict({'auc': 0.6474, 'logloss': 0.6503})
 test result: OrderedDict({'auc': 0.6447, 'logloss': 0.6509})
 ```
 先ほどは`auc: 0.898`であったことを考えると，負例サンプリングは必要な処理であることが分かった．
