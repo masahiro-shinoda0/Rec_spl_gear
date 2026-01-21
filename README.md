@@ -1,5 +1,6 @@
 # recboleを用いた推薦システムの作成
-[`RecBole`](https://www.recbole.io/index.html)を使ったゼミの課題に取り組むうえで，気になったことを以下に書き記す．\
+[`RecBole`](https://www.recbole.io/index.html)を使ったゼミの課題に取り組むうえで，気になったことを以下に書き記す．
+
 2025/12/08に作成．
 2025/12/22から，[`stat.ink`](https://stat.ink/)のデータを利用した推薦システムの作成を開始．\
 2026/01/06から，[`Google Colab`](https://colab.research.google.com/)上で動く[`Streamlit`](https://streamlit.io/)を利用したUIの作成を開始．\
@@ -9,14 +10,6 @@
 以下は`Git`の使い方をまとめたものである．\
 [Gitの使い方まとめ](https://github.com/masahiro-shinoda0/AtCoder/blob/main/readme/HowToUseGitHub.md)
 
-
-## 2025/12/08
-`conda`を使用するために`Anaconda`を使用する．
-`Anaconda Prompt` を起動し，以下のコマンドを実行．
-```
-conda activate recbole
-```
-これは自前ノートパソコンで`RecBole`を使用するために用いたためであり，以降ではサーバーに仮想環境を構築して行ったため，`Anaconda`は使用していない．
 
 ## RecBoleについて
 `RecBole`とは，`PyTorch`ベースの，推薦アルゴリズムのライブラリである．推薦アルゴリズムのライブラリは，他に`Recommenders`や`Spotlight`などがある．\
@@ -99,6 +92,14 @@ conda activate recbole
 - [スプラトゥーン3のステージ一覧](https://stat.ink/api-info/stage3)
 - [スプラトゥーン3の武器一覧](https://stat.ink/api-info/weapon3)
 - [スプラトゥーン3のギアパワー一覧](https://stat.ink/api-info/ability3)
+
+## 2025/12/08
+`conda`を使用するために`Anaconda`を使用する．
+`Anaconda Prompt` を起動し，以下のコマンドを実行．
+```
+conda activate recbole
+```
+これは自前ノートパソコンで`RecBole`を使用するために用いたためであり，以降ではサーバーに仮想環境を構築して行ったため，`Anaconda`は使用していない．
 
 `.yaml`にはパラメータの詳細を記す．`.yaml`とは，`.html`や`.xml`などのデータ形式のうちの一つ．\
 `TensorBoard` で機械学習の結果を可視化，学習曲線をプロットできる．[公式ドキュメント](https://recbole.io/docs/user_guide/usage/use_tensorboard.html)に使い方が詳細に書かれている．使用する際は，以下のコマンドを実行
