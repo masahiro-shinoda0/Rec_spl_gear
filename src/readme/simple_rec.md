@@ -29,7 +29,7 @@
 - [スプラトゥーン3のギアを徹底解説 -イカクロ](https://www.ikaclo.jp/3/guides/gears)
 
 推薦システムの作成手順として，以下のように進める．
-1. stat.inkのAPIよりデータをダウンロード
+1. [`stat.inkのAPI`](https://github.com/fetus-hina/stat.ink/wiki/Spl3-%EF%BC%8D-CSV-Schema-%EF%BC%8D-Battle)よりデータをダウンロード
 2. データセットを作成する．`trainer.py`を用いて，`.inter`を作成．
 3. 作成したデータセットと，`.yaml`，`.hyper`を用いて，学習をする．モデルを選定し，`run.py`より学習．
 4. 学習結果を見て，そのモデルを使うか決める．不足なら，1. に戻る．
