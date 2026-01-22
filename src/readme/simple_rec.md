@@ -54,30 +54,6 @@ myproject/
 └── └── xxx.pth              # PyTorchのモデルはここに作成される
 ```
 
-## 2026/01/04
-初めて`RecBole`を用いるときは，以下のようなエラーが起きる．その時の対処を書き記す．
-`ModuleNotFoundError: No module named 'ray'`このエラーが起きたら，以下のコマンドを実行する．
-```
-pip install ray
-```
-`ModuleNotFoundError: No module named 'pyarrow'`このエラーが起きたら，以下のコマンドを実行する．
-```
-pip install pyarrow
-```
-`ModuleNotFoundError: No module named 'pydantic'`このエラーが起きたら，以下のコマンドを実行する．
-```
-pip install pydantic
-```
-仮想環境(`venv`など)の階層に入り，以下を実行することで仮想環境を使用できる．
-```
-source bin/activate
-```
-うまくいかないときは，以下を試す．必ず仮想環境で行う．まず，`PyTorch`のバージョンを指定して実行．
-```
-pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu130
-```
-次に，`PyTorch`の一部のコードを改変する．`venv`の場合，`env/lib/python3.13/site-packages/recbole/trainer/trainer.py`の583行目を以下のように変更．\
-`checkpoint = torch.load(checkpoint_file, map_location=self.device, weights_only=False)`
 
 ## 2026/01/06
 ### ver 1.0
