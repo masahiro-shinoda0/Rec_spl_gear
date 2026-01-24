@@ -24,7 +24,7 @@ myproject/
 ## 2026/01/06
 ### ver 1.0
 `run.py`を実行してできた`.pth`ファイルをもとに，推論用の`predict.py`を使用して，精度を確かめた．当初の予測精度と推論の結果は以下のようになった．
-```
+```cmd
 best valid : OrderedDict({'auc': 0.608, 'logloss': 0.6709})
 test result: OrderedDict({'auc': 0.6055, 'logloss': 0.6727})
 ```
@@ -61,7 +61,7 @@ liter4k
 !mkdir -p dataset/splatoon3
 ```
 また，ライブラリのインストールは，以下のコマンドをセルで実行する．
-```
+```cmd
 !pip install recbole streamlit pyngrok -q
 !npm install -g localtunnel -q
 ```
@@ -84,7 +84,7 @@ myproject/
 streamlit run app.py &
 ```
 最後に，`localtunnel`を起動する．ポート8501を指定する．
-```
+```jpynb
 npx localtunnel --port 8501
 ```
 表示された`https://xxx.loca.lt`にアクセスし、IPアドレスを入力する．\
@@ -282,12 +282,12 @@ test result: OrderedDict({'auc': 0.8992, 'logloss': 0.2961})
 ```
 結果としては，良くない推薦となった．`quick_super_jump`はそこまで使われるギアではないし，`stealth_jump`はもっと使われてよいはずである．\
 そこで，`.inter`を調べ，データセット不足なのかを検証した．`grep`コマンドを使い，`quick_super_jump`と`stealth_jump`の出現回数を調べた．
-```
+```cmd
 grep "52gal" dataset/splatoon3_xmatch/splatoon3_xmatch.inter | grep "area" | grep "stealth_jump" | grep "1.0" | wc -l
 grep "52gal" dataset/splatoon3_xmatch/splatoon3_xmatch.inter | grep "area" | grep "quick_super_jump" | grep "1.0" | wc -l
 ```
 結果は，`398`と`203`となった．そこで，先ほどの結果がおかしいことがわかる．考えられる原因としては，`quick_super_jump`はメインだけではなくサブとしてもギアが付くのに対し，`stealth_jump`は`1.0`か`0.0`の二択である．そのため，現状の負例サンプリングを用いているままだと，`stealth_jump`のようなギアでは，この`FM`モデルにおいて不利に働いてしまう．以下で，`grep`を使い，今度は負例サンプリングとしての出現回数を調べた．
-```
+```cmd
 grep "52gal" dataset/splatoon3_xmatch/splatoon3_xmatch.inter | grep "area" | grep "stealth_jump" | grep "0.0" | wc -l
 grep "52gal" dataset/splatoon3_xmatch/splatoon3_xmatch.inter | grep "area" | grep "quick_super_jump" | grep "0.0" | wc -l
 ```
